@@ -1,18 +1,18 @@
 from qdrant_client import QdrantClient
-from qdrant_client.http.models import Distance
-from qdrant_client.http.models import PointStruct, VectorParams
+from qdrant_client.http.models import Distance, PointStruct, VectorParams
+
 from .base import BaseVectorStore
 
 
 class QdrantVectorStore(BaseVectorStore):
     def __init__(
-            self,
-            collection_name: str,
-            vector_size: int,
-            host: str = None,
-            port: int = None,
-            url: str = None,
-            distance: "Distance" = Distance.COSINE
+        self,
+        collection_name: str,
+        vector_size: int,
+        host: str = None,
+        port: int = None,
+        url: str = None,
+        distance: "Distance" = Distance.COSINE,
     ):
         """
         Initialize the Qdrant client and create a collection if it doesn't exist.
@@ -35,18 +35,16 @@ class QdrantVectorStore(BaseVectorStore):
         self.vector_size = vector_size
 
         # Check if collection exists; if not, create it.
-        existing_collections = [col.name for col in self.client.get_collections().collections]
+        existing_collections = [
+            col.name for col in self.client.get_collections().collections
+        ]
         if collection_name not in existing_collections:
             self.client.create_collection(
                 collection_name=collection_name,
-                vectors_config=VectorParams(size=vector_size, distance=distance)
+                vectors_config=VectorParams(size=vector_size, distance=distance),
             )
 
-    def upsert(
-            self,
-            vectors: list,
-            namespace: str
-    ) -> None:
+    def upsert(self, vectors: list, namespace: str) -> None:
         """
         Upsert a batch of vectors into Qdrant.
         Note: The 'namespace' parameter is not used since Qdrant uses collections.
@@ -59,13 +57,7 @@ class QdrantVectorStore(BaseVectorStore):
             points.append(PointStruct(id=unique_id, vector=embedding, payload=metadata))
         self.client.upsert(collection_name=self.collection_name, points=points)
 
-    def query(
-            self,
-            vector: list,
-            top_k: int,
-            filter: dict,
-            namespace: str
-    ) -> dict:
+    def query(self, vector: list, top_k: int, filter: dict, namespace: str) -> dict:
         """
         Query the Qdrant collection for nearest vectors.
         The provided filter is converted into Qdrant's filter format.
@@ -79,11 +71,7 @@ class QdrantVectorStore(BaseVectorStore):
         # Convert a simple filter dictionary to Qdrant's format.
         if filter and len(filter) > 0:
             key, value = list(filter.items())[0]
-            query_filter = {
-                "must": [
-                    {"key": key, "match": {"value": value}}
-                ]
-            }
+            query_filter = {"must": [{"key": key, "match": {"value": value}}]}
         else:
             query_filter = None
 
@@ -92,15 +80,11 @@ class QdrantVectorStore(BaseVectorStore):
             query_vector=vector,
             query_filter=query_filter,
             limit=top_k,
-            with_payload=True
+            with_payload=True,
         )
 
         matches = []
         for point in search_result:
-            match = {
-                "id": point.id,
-                "score": point.score,
-                "metadata": point.payload
-            }
+            match = {"id": point.id, "score": point.score, "metadata": point.payload}
             matches.append(match)
         return {"matches": matches}

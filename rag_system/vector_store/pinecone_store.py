@@ -1,14 +1,10 @@
 from pinecone import Pinecone
+
 from .base import BaseVectorStore
 
 
 class PineconeVectorStore(BaseVectorStore):
-    def __init__(
-            self,
-            api_key: str,
-            environment: str,
-            index_name: str
-    ):
+    def __init__(self, api_key: str, environment: str, index_name: str):
         """
         Initialize the Pinecone vector store.
 
@@ -19,11 +15,7 @@ class PineconeVectorStore(BaseVectorStore):
         pinecone = Pinecone(api_key=api_key, environment=environment)
         self.index = pinecone.Index(index_name)
 
-    def upsert(
-            self,
-            vectors: list,
-            namespace: str
-    ) -> None:
+    def upsert(self, vectors: list, namespace: str) -> None:
         """
         Upsert a batch of vectors into the Pinecone index.
 
@@ -32,13 +24,7 @@ class PineconeVectorStore(BaseVectorStore):
         """
         self.index.upsert(vectors=vectors, namespace=namespace)
 
-    def query(
-            self,
-            vector: list,
-            top_k: int,
-            filter: dict,
-            namespace: str
-    ) -> dict:
+    def query(self, vector: list, top_k: int, filter: dict, namespace: str) -> dict:
         """
         Query the Pinecone index for nearest vectors.
 

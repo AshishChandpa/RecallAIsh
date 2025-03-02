@@ -10,10 +10,7 @@ from rag_system.vector_store.base import BaseVectorStore
 
 class RAGSystem:
     def __init__(
-            self,
-            vector_store: BaseVectorStore,
-            vector_namespace: str,
-            openai_api_key: str
+        self, vector_store: BaseVectorStore, vector_namespace: str, openai_api_key: str
     ):
         """
         Initialize a RAGSystem instance.
@@ -26,11 +23,7 @@ class RAGSystem:
         self.vector_namespace = vector_namespace
         self.client = OpenAI(api_key=openai_api_key)
 
-    def get_embedding(
-            self,
-            text: str,
-            model: str = "text-embedding-ada-002"
-    ) -> list:
+    def get_embedding(self, text: str, model: str = "text-embedding-ada-002") -> list:
         """
         Compute an embedding for a given text string using OpenAI's text embeddings API.
 
@@ -42,10 +35,7 @@ class RAGSystem:
         response = self.client.embeddings.create(input=[text], model=model)
         return response.data[0].embedding
 
-    def create_embedding_and_upsert(
-            self,
-            document: dict
-    ) -> None:
+    def create_embedding_and_upsert(self, document: dict) -> None:
         """
         Train the RAG system with a given document by chunking its content,
         generating embeddings for each chunk, and upserting them into the vector store.
@@ -73,7 +63,7 @@ class RAGSystem:
                 "title": title,
                 "chunk_text": chunk,
                 "chunk_index": chunk_idx,
-                "metadata": document.get("metadata", {})
+                "metadata": document.get("metadata", {}),
             }
 
             self.vector_store.upsert(
@@ -82,10 +72,7 @@ class RAGSystem:
             )
 
     def retrieve_documents(
-            self,
-            user_query: str,
-            filter_value: str,
-            top_k: int = 5
+        self, user_query: str, filter_value: str, top_k: int = 5
     ) -> str:
         """
         Query the RAG system and retrieve the top-k relevant context from the database.
@@ -147,6 +134,6 @@ class RAGSystem:
                 {"role": "user", "content": full_prompt},
             ],
             temperature=temperature,
-            max_tokens=max_tokens
+            max_tokens=max_tokens,
         )
         return response.choices[0].message.content

@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+
 from .base_loader import BaseDocumentLoader
 
 
@@ -26,5 +27,5 @@ class WebDocumentLoader(BaseDocumentLoader):
         return {
             "title": title,
             "text_content": text,
-            "metadata": {"url": url, "file_type": "web"}
+            "metadata": {"url": url, "file_type": "web"},
         }

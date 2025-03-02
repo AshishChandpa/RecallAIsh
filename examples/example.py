@@ -1,11 +1,11 @@
-from rag_system.vector_store.qdrant_store import QdrantVectorStore
+import os
 
-from rag_system.rag_system import RAGSystem
-from rag_system.prompt_manager import PromptManager
+from dotenv import load_dotenv
 from openai import OpenAI
 
-import os
-from dotenv import load_dotenv
+from rag_system.prompt_manager import PromptManager
+from rag_system.rag_system import RAGSystem
+from rag_system.vector_store.qdrant_store import QdrantVectorStore
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -19,14 +19,14 @@ def main():
     qdrant_store = QdrantVectorStore(
         url="http://localhost:6333",
         collection_name="my_rag_collection",
-        vector_size=1536  # adjust to your embedding dimension
+        vector_size=1536,  # adjust to your embedding dimension
     )
 
     # Initialize the RAG system with Qdrant.
     rag_system = RAGSystem(
         vector_store=qdrant_store,
         vector_namespace="unused_namespace",
-        openai_api_key=os.getenv("OPENAI_API_KEY")
+        openai_api_key=os.getenv("OPENAI_API_KEY"),
     )
 
     # # Ingest PDFs and websites

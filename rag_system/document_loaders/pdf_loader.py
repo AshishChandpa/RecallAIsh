@@ -1,11 +1,10 @@
 import PyPDF2
+
 from .base_loader import BaseDocumentLoader
 
+
 class PdfDocumentLoader(BaseDocumentLoader):
-    def load(
-            self,
-            file_path: str
-    ) -> dict:
+    def load(self, file_path: str) -> dict:
         """
         Load a PDF document from a given file path and return a dictionary with keys
         like 'title', 'text_content', and any additional metadata.
@@ -27,5 +26,5 @@ class PdfDocumentLoader(BaseDocumentLoader):
         return {
             "title": file_path,
             "text_content": text,
-            "metadata": {"file_type": "pdf"}
+            "metadata": {"file_type": "pdf"},
         }

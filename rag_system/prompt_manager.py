@@ -1,18 +1,11 @@
 class PromptManager:
-    def __init__(
-            self,
-            instructions: str
-    ):
+    def __init__(self, instructions: str):
         """
         Initialize with a set of instructions for the prompt.
         """
         self.instructions = instructions
 
-    def create_prompt(
-            self,
-            context: str,
-            query: str
-    ) -> str:
+    def create_prompt(self, context: str, query: str) -> str:
         """
         Create a full prompt using the provided context and user query.
         """

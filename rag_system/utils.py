@@ -1,8 +1,4 @@
-def chunk_text(
-        text: str,
-        chunk_size: int = 200,
-        chunk_overlap: int = 50
-) -> list:
+def chunk_text(text: str, chunk_size: int = 200, chunk_overlap: int = 50) -> list:
     """
     Splits text into overlapping chunks based on a word count.
     """

@@ -30,9 +30,9 @@ def main():
     )
 
     # # Ingest PDFs and websites
-    # pdfs = ["/home/ashish/Documents/Projects/AI/yuki-chatbot-demo/statics/data.pdf"]
-    # websites = ["https://kevit.io/"]
-    # rag_system.ingestion_pipeline(pdfs=pdfs, websites=websites)
+    pdfs = ["/path/to/pdf"]
+    websites = ["https://xyz.com/"]
+    rag_system.ingestion_pipeline(pdfs=pdfs, websites=websites)
 
     # Create a Prompt::
     user_query = "Explain the main concepts from the documents."

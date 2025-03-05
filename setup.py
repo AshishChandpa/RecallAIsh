@@ -8,7 +8,7 @@ with open(path.join(work_dir, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-    name="RecallAI",
+    name="RecallAIsh",
     version="0.1.0",
     packages=find_packages(),
     install_requires=[

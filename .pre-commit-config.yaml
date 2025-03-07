@@ -52,7 +52,7 @@ repos:
     hooks:
     -   id: vulture
         args: [
-            "rag_system",
+            "RecallAIsh",
             "--min-confidence=80",  # Set minimum confidence for detecting unused code
             "--exclude=.venv/*,venv/*,.env/*,env/*",  # Exclude virtual environments
         ]

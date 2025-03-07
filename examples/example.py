@@ -21,7 +21,7 @@ def main():
         url="<MongoURL>",
         database="vectorstore",
         collection_name="my_rag_collection",
-        index_name='my_vector_index'
+        index_name="my_vector_index",
     )
     # Initialize the RAG system with Qdrant.
     rag_system = RAGSystem(

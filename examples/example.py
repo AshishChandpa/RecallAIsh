@@ -31,7 +31,13 @@ def main():
     )
     # Ingest PDFs and websites
     pdfs = ["file"]
-    rag_system.ingestion_pipeline(pdf=pdfs)
+    websites = ["https://www.example.com"]
+    from rag_system.document_loaders.pdf_loader import PdfDocumentLoader
+    from rag_system.document_loaders.web_loader import WebDocumentLoader
+
+    rag_system.ingestion_pipeline(
+        documents=[PdfDocumentLoader().loads(pdfs), WebDocumentLoader().loads(websites)]
+    )
 
     # # Create a Prompt::
     user_query = "What did he think about programming?"

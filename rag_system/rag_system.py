@@ -1,9 +1,8 @@
 import uuid
+from typing import List
 
 from openai import OpenAI
 
-from rag_system.document_loaders.pdf_loader import PdfDocumentLoader
-from rag_system.document_loaders.web_loader import WebDocumentLoader
 from rag_system.utils import chunk_text
 from rag_system.vector_store.base import BaseVectorStore
 
@@ -100,26 +99,11 @@ class RAGSystem:
 
         return retrieved_context
 
-    def ingestion_pipeline(self, **sources):
+    def ingestion_pipeline(self, documents: List) -> None:
         """
-        Ingest documents from various sources into the RAG system.
-
-        :param sources: Keyword arguments representing different document sources and their corresponding files/URLs.
-                        E.g., pdfs=['file1.pdf'], websites=['http://example.com'], etc.
-        :return: None
+        Ingest a list of documents into the RAG system by creating embeddings and upserting them into the vector store.
         """
-        loaders = {
-            "pdf": PdfDocumentLoader(),
-            "web": WebDocumentLoader(),
-            # Add more loaders for additional file types as needed.
-        }
-        docs = []
-        for file_type, files in sources.items():
-            if file_type in loaders:
-                for file in files:
-                    docs.append(loaders[file_type].load(file))
-
-        for doc in docs:
+        for doc in documents:
             self.create_embedding_and_upsert(doc)
 
     def chat(self, full_prompt, model, temperature=0.7, max_tokens=500):

@@ -18,6 +18,7 @@ setup(
         "beautifulsoup4",
         "requests",
         "PyPDF2",
+        "playwright",
     ],
     author="Ashish Chandpa",
     author_email="chandpa.ashish007@gmail.com",

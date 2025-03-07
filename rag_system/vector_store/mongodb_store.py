@@ -6,7 +6,15 @@ from .base import BaseVectorStore
 
 
 class MongoDBVectorStore(BaseVectorStore):
-    def __init__(self, url: str, database: str, collection_name: str, index_name: str,dimensions:int =1536,  similarity: str = "cosine"):
+    def __init__(
+        self,
+        url: str,
+        database: str,
+        collection_name: str,
+        index_name: str,
+        dimensions: int = 1536,
+        similarity: str = "cosine",
+    ):
         self.client = MongoClient(url)
         self.index_name = index_name
         self.db = self.client[database]
@@ -18,21 +26,23 @@ class MongoDBVectorStore(BaseVectorStore):
     def _create_vector_index(self, dimensions: int, similarity: str):
         # Create the vector index with the specified dimensions and similarity metric
         try:
-            index_result = self.collection.create_search_index(operations.SearchIndexModel(
-                definition={
-                    "fields": [
-                        {
-                            "type": "vector",
-                            "path": "embedding",
-                            "numDimensions": dimensions,
-                            "similarity": similarity,
-                            "quantization": "scalar"
-                        }
-                    ]
-                },
-                name=self.index_name,
-                type="vectorSearch"
-            ))
+            index_result = self.collection.create_search_index(
+                operations.SearchIndexModel(
+                    definition={
+                        "fields": [
+                            {
+                                "type": "vector",
+                                "path": "embedding",
+                                "numDimensions": dimensions,
+                                "similarity": similarity,
+                                "quantization": "scalar",
+                            }
+                        ]
+                    },
+                    name=self.index_name,
+                    type="vectorSearch",
+                )
+            )
             print("Index creation result:", index_result)
             return index_result
         except Exception as e:
@@ -45,8 +55,9 @@ class MongoDBVectorStore(BaseVectorStore):
         ]
         self.collection.insert_many(documents)
 
-    def query(self, vector: list, top_k: int, filter: dict, namespace: str) -> list[Mapping[str, Any] | Any]:
-
+    def query(
+        self, vector: list, top_k: int, filter: dict, namespace: str
+    ) -> list[Mapping[str, Any] | Any]:
         pipeline = [
             {
                 "$vectorSearch": {
@@ -55,10 +66,20 @@ class MongoDBVectorStore(BaseVectorStore):
                     "numCandidates": 5,
                     "path": "embedding",
                     # "exact": True,
-                    "limit": 5
+                    "limit": 5,
                 }
-            }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "text": 1,
+                    "metadata": 1,
+                    "score": {"$meta": "vectorSearchScore"},
+                }
+            },
         ]
         results = list(self.collection.aggregate(pipeline))
-        print("This are the Collections:::", list(self.collection.list_search_indexes()))
+        print(
+            "This are the Collections:::", list(self.collection.list_search_indexes())
+        )
         return results

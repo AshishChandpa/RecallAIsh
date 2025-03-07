@@ -9,7 +9,7 @@ with open(path.join(work_dir, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="RecallAIsh",
-    version="0.2.0",
+    version="0.2.1",
     packages=find_packages(),
     install_requires=[
         "openai",

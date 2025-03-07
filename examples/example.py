@@ -5,7 +5,7 @@ from openai import OpenAI
 
 from rag_system.prompt_manager import PromptManager
 from rag_system.rag_system import RAGSystem
-from rag_system.vector_store.qdrant_store import QdrantVectorStore
+from rag_system.vector_store.mongodb_store import MongoDBVectorStore
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -16,26 +16,25 @@ def main():
     Example script to demonstrate the usage of the RAG system.
     """
     # Configure Qdrant connection (adjust host, port, and collection details as needed)
-    qdrant_store = QdrantVectorStore(
-        url="http://localhost:6333",
-        collection_name="my_rag_collection",
-        vector_size=1536,  # adjust to your embedding dimension
-    )
 
+    mongo_store = MongoDBVectorStore(
+        url="<MongoURL>",
+        database="vectorstore",
+        collection_name="my_rag_collection",
+        index_name="my_vector_index",
+    )
     # Initialize the RAG system with Qdrant.
     rag_system = RAGSystem(
-        vector_store=qdrant_store,
+        vector_store=mongo_store,
         vector_namespace="unused_namespace",
         openai_api_key=os.getenv("OPENAI_API_KEY"),
     )
+    # Ingest PDFs and websites
+    pdfs = ["file"]
+    rag_system.ingestion_pipeline(pdf=pdfs)
 
-    # # Ingest PDFs and websites
-    pdfs = ["/path/to/pdf"]
-    websites = ["https://xyz.com/"]
-    rag_system.ingestion_pipeline(pdfs=pdfs, websites=websites)
-
-    # Create a Prompt::
-    user_query = "Explain the main concepts from the documents."
+    # # Create a Prompt::
+    user_query = "What did he think about programming?"
     context = rag_system.retrieve_documents(user_query, "pdf")
 
     instructions = "You are an expert assistant tasked with answering questions using the provided context."

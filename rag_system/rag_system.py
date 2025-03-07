@@ -91,28 +91,34 @@ class RAGSystem:
             namespace=self.vector_namespace,
         )
 
+        results_list = (
+            results if isinstance(results, list) else results.get("matches", [])
+        )
         retrieved_context = "\n\n".join(
-            match["metadata"]["chunk_text"] for match in results.get("matches", [])
+            match["metadata"]["chunk_text"] for match in results_list
         )
 
         return retrieved_context
 
-    def ingestion_pipeline(self, pdfs: list, websites: list):
+    def ingestion_pipeline(self, **sources):
         """
-        Ingest documents from the provided lists of PDFs and websites into the RAG system.
+        Ingest documents from various sources into the RAG system.
 
-        :param pdfs: A list of PDF file paths.
-        :param websites: A list of website URLs.
+        :param sources: Keyword arguments representing different document sources and their corresponding files/URLs.
+                        E.g., pdfs=['file1.pdf'], websites=['http://example.com'], etc.
         :return: None
         """
         loaders = {
             "pdf": PdfDocumentLoader(),
             "web": WebDocumentLoader(),
+            # Add more loaders for additional file types as needed.
         }
         docs = []
-        for file_type, files in {"pdf": pdfs, "web": websites}.items():
-            for file in files:
-                docs.append(loaders[file_type].load(file))
+        for file_type, files in sources.items():
+            if file_type in loaders:
+                for file in files:
+                    docs.append(loaders[file_type].load(file))
+
         for doc in docs:
             self.create_embedding_and_upsert(doc)
 

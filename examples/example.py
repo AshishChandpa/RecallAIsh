@@ -3,9 +3,9 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-from rag_system.prompt_manager import PromptManager
-from rag_system.rag_system import RAGSystem
-from rag_system.vector_store.mongodb_store import MongoDBVectorStore
+from RecallAIsh.prompt_manager import PromptManager
+from RecallAIsh.rag_system import RAGSystem
+from RecallAIsh.vector_store.mongodb_store import MongoDBVectorStore
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -32,8 +32,8 @@ def main():
     # Ingest PDFs and websites
     pdfs = ["file"]
     websites = ["https://www.example.com"]
-    from rag_system.document_loaders.pdf_loader import PdfDocumentLoader
-    from rag_system.document_loaders.web_loader import WebDocumentLoader
+    from RecallAIsh.document_loaders.pdf_loader import PdfDocumentLoader
+    from RecallAIsh.document_loaders.web_loader import WebDocumentLoader
 
     rag_system.ingestion_pipeline(
         documents=[PdfDocumentLoader().loads(pdfs), WebDocumentLoader().loads(websites)]

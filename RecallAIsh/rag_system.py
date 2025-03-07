@@ -3,8 +3,8 @@ from typing import List
 
 from openai import OpenAI
 
-from rag_system.utils import chunk_text
-from rag_system.vector_store.base import BaseVectorStore
+from RecallAIsh.utils import chunk_text
+from RecallAIsh.vector_store.base import BaseVectorStore
 
 
 class RAGSystem:

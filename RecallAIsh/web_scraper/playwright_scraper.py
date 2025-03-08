@@ -7,7 +7,7 @@ import playwright.sync_api as playwright
 from .base import BaseScraper, logger
 
 
-class PlaywrightScrapper(BaseScraper):
+class PlaywrightScraper(BaseScraper):
     def __init__(self):
         self.browser = None
 

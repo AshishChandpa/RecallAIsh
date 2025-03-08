@@ -9,7 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from .base import BaseScraper, logger
 
 
-class SeleniumScrapper(BaseScraper):
+class SeleniumScraper(BaseScraper):
     def __init__(self):
         self.driver = self._init_driver()
 

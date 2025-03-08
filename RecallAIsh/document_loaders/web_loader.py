@@ -41,16 +41,16 @@ class WebDocumentLoader(BaseDocumentLoader):
 
     def _load_with_playwright(self, url: str) -> dict:
         # Placeholder for Playwright implementation
-        from ..web_scrapper.playwright_scrapper import PlaywrightScrapper
+        from ..web_scraper.playwright_scraper import PlaywrightScraper
 
-        scrapper = PlaywrightScrapper()
+        scrapper = PlaywrightScraper()
         return scrapper.extract_data(url)
 
     def _load_with_selenium(self, url: str) -> dict:
         # Placeholder for Selenium implementation
-        from ..web_scrapper.selenium_scrapper import SeleniumScrapper
+        from ..web_scraper.selenium_scraper import SeleniumScraper
 
-        scrapper = SeleniumScrapper()
+        scrapper = SeleniumScraper()
         return scrapper.extract_data(url)
 
     def _load_with_beautifulsoup(self, url: str) -> dict:

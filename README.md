@@ -33,7 +33,7 @@ RecallAIsh leverages the power of state-of-the-art retrieval methods combined wi
 - An OpenAI API key
 
 ### Install via PyPI
-Install RecallAI using the Python Package Index:
+Install RecallAIsh using the Python Package Index:
 ```sh
 pip install RecallAIsh
 ```
@@ -45,8 +45,8 @@ pip install RecallAIsh[mongodb]
 ### Manual Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/AshishChandpa/RecallAI.git
-   cd RecallAI
+   git clone https://github.com/AshishChandpa/RecallAIsh.git
+   cd RecallAIsh
    ```
 2. Install the dependencies:
    ```sh
@@ -65,7 +65,7 @@ pip install RecallAIsh[mongodb]
 ## Usage
 
 ### Running an Example
-See RecallAI in action with the provided example script:
+See RecallAIsh in action with the provided example script:
 ```sh
 python examples/example.py
 ```
@@ -130,7 +130,7 @@ print("Answer:", response)
 - Adjust the prompt management module to refine how context and instructions are combined for your specific application.
 
 ## Web Scraper Integration
-RecallAI now includes a web scraper module which leverages standard libraries like BeautifulSoup and requests. This allows you to dynamically ingest web content:
+RecallAIsh now includes a web scraper module which leverages standard libraries like BeautifulSoup and requests. This allows you to dynamically ingest web content:
 - Configure the scraper with custom parameters such as user-agent, timeout, and parsing criteria.
 - Automatically process and clean HTML content before storing it in your chosen vector store.
 
@@ -141,9 +141,9 @@ Contributions are welcome! To contribute:
 3. Follow the coding standards and ensure tests pass before submission.
 
 ## License
-RecallAI is available under the MIT License. See the [LICENSE](LICENSE) file for more details.
+RecallAIsh is available under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ## Contact
 For further questions or feedback, please contact via email: [chandpa.ashish007@gmail.com](mailto:chandpa.ashish007@gmail.com).
 
-Happy coding with RecallAI!
+Happy coding with RecallAIsh!

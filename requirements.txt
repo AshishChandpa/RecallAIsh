@@ -1,0 +1,12 @@
+python-dotenv
+openai
+pytest
+selenium
+webdriver-manager
+beautifulsoup4
+requests
+PyPDF2
+pymongo
+qdrant-client
+pinecone-client
+playwright

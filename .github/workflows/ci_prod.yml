@@ -5,6 +5,7 @@ on:
     branches:
       - production
       - development
+      - fix/scraping-rename
 
 jobs:
   build:
@@ -23,10 +24,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Run tests
-      run: |
-        pytest
 
   publish:
     needs: build

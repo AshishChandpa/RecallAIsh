@@ -24,21 +24,25 @@ class MongoDBVectorStore(BaseVectorStore):
         self._create_vector_index(dimensions=dimensions, similarity=similarity)
 
     def _create_vector_index(self, dimensions: int, similarity: str):
-        # Create the vector index with the specified dimensions and similarity metric
+        # Create the vector index with the specified dimensions and similarity metrics
         try:
             index_result = self.collection.create_search_index(
                 operations.SearchIndexModel(
                     definition={
-                        "fields": [
-                            {
-                                "type": "vector",
-                                "path": "embedding",
-                                "numDimensions": dimensions,
-                                "similarity": similarity,
-                                "quantization": "scalar",
-                            }
-                        ]
-                    },
+                    "fields": [
+                        {
+                            "type": "vector",
+                            "path": "embedding",
+                            "numDimensions": dimensions,
+                            "similarity": similarity,
+                            "quantization": "scalar",
+                        },
+                        {
+                            "type": "token",
+                            "path": "metadata.file_type"  # Adding metadata.file_type for filtering
+                        }
+                    ]
+                },
                     name=self.index_name,
                     type="vectorSearch",
                 )
@@ -67,7 +71,7 @@ class MongoDBVectorStore(BaseVectorStore):
         }
 
         if filter:
-            vector_search_stage["filter"] = filter  # Fixing incorrect curly braces
+            vector_search_stage["$vectorSearch"]["filter"] = filter  # Fixing incorrect curly braces
 
         pipeline = [
             vector_search_stage,

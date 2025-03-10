@@ -9,7 +9,8 @@ from RecallAIsh.vector_store.base import BaseVectorStore
 
 class RAGSystem:
     def __init__(
-        self, vector_store: BaseVectorStore, vector_namespace: str, openai_api_key: str
+            self, vector_store: BaseVectorStore, vector_namespace: str, openai_api_key: str,
+            embedding_model: str = "text-embedding-ada-002", base_url: str = None
     ):
         """
         Initialize a RAGSystem instance.
@@ -20,9 +21,10 @@ class RAGSystem:
         """
         self.vector_store = vector_store
         self.vector_namespace = vector_namespace
-        self.client = OpenAI(api_key=openai_api_key)
+        self.client = OpenAI(api_key=openai_api_key, base_url=base_url)
+        self.embedding_model = embedding_model
 
-    def get_embedding(self, text: str, model: str = "text-embedding-ada-002") -> list:
+    def get_embedding(self, text: str) -> list:
         """
         Compute an embedding for a given text string using OpenAI's text embeddings API.
 
@@ -31,20 +33,23 @@ class RAGSystem:
 
         :return: A list of float32 values representing the embedding.
         """
-        response = self.client.embeddings.create(input=[text], model=model)
+        response = self.client.embeddings.create(input=[text], model=self.embedding_model)
         return response.data[0].embedding
 
     def create_embedding_and_upsert(self, document: dict) -> None:
         """
-        Train the RAG system with a given document by chunking its content,
-        generating embeddings for each chunk, and upserting them into the vector store.
+            Train the RAG system with a given document by chunking its content,
+            generating embeddings for each chunk, and upserting them into the vector store.
 
-        :param document: A dictionary containing the document's data with the following keys:
-            - title: The title of the document.
-            - text_content: The main text content of the document.
-            - metadata: Additional metadata associated with the document.
-        :return: None
+            :param document: A dictionary containing the document's data with the following keys:
+                - title: The title of the document.
+                - text_content: The main text content of the document.
+                - metadata: Additional metadata associated with the document.
+            :return: None
         """
+        if type(document) is list:
+            for doc in document:
+                self.create_embedding_and_upsert(doc)
         title = document.get("title", "Untitled")
 
         text_content = document.get("text_content", "")
@@ -71,7 +76,7 @@ class RAGSystem:
             )
 
     def retrieve_documents(
-        self, user_query: str, filter_value: str, top_k: int = 5
+            self, user_query: str, filter_value: str, top_k: int = 5
     ) -> str:
         """
         Query the RAG system and retrieve the top-k relevant context from the database.

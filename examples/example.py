@@ -6,6 +6,7 @@ from openai import OpenAI
 from RecallAIsh.prompt_manager import PromptManager
 from RecallAIsh.rag_system import RAGSystem
 from RecallAIsh.vector_store.mongodb_store import MongoDBVectorStore
+from RecallAIsh.enums import ScrapperType
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -36,7 +37,7 @@ def main():
     from RecallAIsh.document_loaders.web_loader import WebDocumentLoader
 
     rag_system.ingestion_pipeline(
-        documents=[PdfDocumentLoader().loads(pdfs), WebDocumentLoader().loads(websites)]
+        documents=[PdfDocumentLoader().loads(pdfs), WebDocumentLoader(scraper_type=ScrapperType.PLAYWRIGHT.value).loads(websites)]
     )
 
     # # Create a Prompt::

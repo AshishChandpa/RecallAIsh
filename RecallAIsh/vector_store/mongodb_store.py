@@ -55,20 +55,22 @@ class MongoDBVectorStore(BaseVectorStore):
         ]
         self.collection.insert_many(documents)
 
-    def query(
-        self, vector: list, top_k: int, filter: dict, namespace: str
-    ) -> list[Mapping[str, Any] | Any]:
+    def query(self, vector: list, top_k: int, filter: dict, namespace: str) -> list[Mapping[str, Any] | Any]:
+        vector_search_stage = {
+            "$vectorSearch": {
+                "index": self.index_name,
+                "queryVector": vector,
+                "numCandidates": max(top_k * 2, 10),  # Adjusting dynamically for better recall
+                "path": "embedding",
+                "limit": top_k,
+            }
+        }
+
+        if filter:
+            vector_search_stage["filter"] = filter  # Fixing incorrect curly braces
+
         pipeline = [
-            {
-                "$vectorSearch": {
-                    "index": self.index_name,
-                    "queryVector": vector,
-                    "numCandidates": 5,
-                    "path": "embedding",
-                    # "exact": True,
-                    "limit": 5,
-                }
-            },
+            vector_search_stage,
             {
                 "$project": {
                     "_id": 0,
@@ -78,8 +80,9 @@ class MongoDBVectorStore(BaseVectorStore):
                 }
             },
         ]
+
         results = list(self.collection.aggregate(pipeline))
-        print(
-            "This are the Collections:::", list(self.collection.list_search_indexes())
-        )
+
+        print(f"Collection Indexes: {list(self.collection.list_search_indexes())}")
+
         return results

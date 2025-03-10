@@ -35,7 +35,7 @@ class WebDocumentLoader(BaseDocumentLoader):
             return self._load_with_playwright(url)
 
         elif self.scraper_type == "Selenium":
-            return self._load_with_selenium
+            return self._load_with_selenium(url)
         else:
             raise ValueError(f"Unsupported scraper type: {self.scraper_type}")
 

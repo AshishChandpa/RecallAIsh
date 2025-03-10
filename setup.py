@@ -9,13 +9,17 @@ with open(path.join(work_dir, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="RecallAIsh",
-    version="0.2.1",
+    version="0.2.4",
     packages=find_packages(),
     install_requires=[
         "openai",
         "beautifulsoup4",
         "requests",
         "PyPDF2",
+        "pymongo",
+        "pinecone-client",
+        "qdrant-client",
+        "playwright"
     ],
     extras_require={
         "pinecone": ["pinecone-client"],

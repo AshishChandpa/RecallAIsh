@@ -24,7 +24,7 @@ class MongoDBVectorStore(BaseVectorStore):
         self._create_vector_index(dimensions=dimensions, similarity=similarity)
 
     def _create_vector_index(self, dimensions: int, similarity: str):
-        # Create the vector index with the specified dimensions and similarity metric
+        # Create the vector index with the specified dimensions and similarity metrics
         try:
             index_result = self.collection.create_search_index(
                 operations.SearchIndexModel(
